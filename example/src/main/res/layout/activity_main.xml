@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    tools:context="com.q42.qlassified_example.MainActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/classified_input_label"
+            android:id="@+id/classified_input_label"/>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/put_alias_classified_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:hint="@string/key_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/put_alias_classified_edittext"
+                android:inputType="textMultiLine" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/put_value_classified_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:hint="@string/value_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/put_value_classified_edittext"
+                android:inputType="textMultiLine" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/put_classified_button"
+            android:id="@+id/put_classified_button" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="@string/classified_output_label"
+            android:id="@+id/get_classified_textview" />
+
+        <android.support.design.widget.TextInputLayout
+            android:id="@+id/get_value_classified_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:hint="@string/key_label"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/get_value_classified_edittext"
+                android:inputType="textMultiLine" />
+
+        </android.support.design.widget.TextInputLayout>
+
+        <Button
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/get_classified_button"
+            android:id="@+id/get_classified_button" />
+
+    </LinearLayout>
+
+</ScrollView>

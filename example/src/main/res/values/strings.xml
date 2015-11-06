@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Qlassified</string>
+    <string name="classified_input_label">Qlassified string input</string>
+    <string name="classified_output_label">Qlassified string output</string>
+    <string name="put_classified_button">Save it</string>
+    <string name="get_classified_button">Get it</string>
+    <string name="key_label">Key</string>
+    <string name="value_label">Value</string>
+    <string name="result_found">Got value: %s</string>
+    <string name="no_result">Could not find any value</string>
+    <string name="storage_name">QlassifiedExample</string>
+</resources>

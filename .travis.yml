@@ -19,4 +19,4 @@ android:
     - build-tools-23.0.1
     - android-23
 
-script: ./gradlew test
+script: touch local.properties && ./gradlew test

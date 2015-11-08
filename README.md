@@ -1,21 +1,21 @@
 [![Qlassified][qlassified-image]][qlassified-url]
 
 # Qlassified Android Library
-**An Android Wrapper Library for easy Keystore Encryption **
+__An Android Wrapper Library for easy Keystore Encryption__
 
 [![Build Status][travis-image]][travis-url]
 
 ## Storing sensitive data
 
-We all need to store sensitive data now and again. On Android, keeping your data secure can be a real pain. Because even when you create a key and a salt and encrypt your data with it, where are you going to put this key and salt? The APK can be pulled apart which reveals your creation for all the world to see. Ever since API 18, Android made their Keystore available through a Public API. This should be the place where you can easily store this sensitive data. But guess what, the Keystore is also quite a drag to use... So this library aims to make this all a lot easier and more accessible. 
+We all need to store sensitive data now and again. On Android, keeping your data secure can be a real pain. Because even when you create a key and a salt and encrypt your data with it, where are you going to put this key and salt? The APK can be pulled apart which reveals your secrets for all the world to see. Ever since API 18, Android made their Keystore available through a Public API. This should be the place where you can easily store this sensitive data. But guess what, the Keystore is also quite a drag to use... So this library aims to make this all a lot easier and more accessible. 
 
 ## Getting started
 
 Add the gradle dependency to your application.
 
-``
+```java
 compile 'com.q42:qlassified:0.1.0'
-``
+```
 
 The library is available on both jCenter and Maven Central so you can use whichever. Whatever floats your boat!
 
@@ -26,7 +26,7 @@ To access your Application specific Keystore, Qlassified needs your application 
 ```java
 // Initialize the Qlassified service
 Qlassified.Service.start(this);
-Qlassified.Service.setStorageService(new QlassifiedSharedPreferencesService(this, getString(R.string.storage_name)));
+Qlassified.Service.setStorageService(new QlassifiedSharedPreferencesService(this, "My Amazing Secure App"));
 
 // Save a key/value pair encrypted
 Qlassified.Service.put("SomeKey", "SomeValue");
@@ -35,9 +35,9 @@ Qlassified.Service.put("SomeKey", "SomeValue");
 Qlassified.Service.getString("SomeKey");
 ```
 
-As you can see, it's pretty easy to save and secure your key/value pair data.
+As you can see, it's pretty easy to save and secure your key/value paired data.
 
-__An example project, using the above Shared Preference Service is available in this repository__
+__[An example project](https://github.com/Q42/Qlassified-Android/tree/master/example), using the above Shared Preference Service is available in this repository__
 
 ## Return values
 
@@ -47,9 +47,9 @@ When the data could not be fetched through the get method, for any reason whatso
 
 ## Data types
 
-When putting data in, the library takes care of saving the data type with the data so it can be returned as the right type. When getting the data back, you will need to address the right method containing the name of the data type __get\[Type\]\("key"\)__ (E.G. getString("key") or getBoolean("key").
+When putting data in, the library takes care of saving the data type with the data so it can be returned as the right type. When getting the data back, you will need to address the right method containing the name of the data type. E.G. getString("key") or getBoolean("key").
 
-Possible data types at the moment:
+Available data types at the moment:
 
 * Boolean
 * Float
@@ -57,11 +57,11 @@ Possible data types at the moment:
 * Long
 * String
 
-The library uses non-primitive types so it can return null when a value could not be fetched.
+The library uses non-primitive types so it can return a null when a value could not be fetched.
 
 ## Custom Storage Service
 
-If you want / need to create your own storage service where the encrypted data will be stored then you can do so by extending the abstract class [QlassifiedStorageService](https://github.com/Q42/Qlassified-Android/blob/master/qlassified/src/main/java/com/q42/qlassified/Storage/QlassifiedStorageService.java). After inserting the class into the [Qlassified.Service.setStorageService()](https://github.com/Q42/Qlassified-Android/blob/master/qlassified/src/main/java/com/q42/qlassified/Qlassified.java#L63) function, your class will be receiving encrypted data through the onSaveRequest() and onGetRequest() functions.
+If you want / need to create your own storage service where the encrypted data will be stored then you can do so by extending the abstract class [QlassifiedStorageService](https://github.com/Q42/Qlassified-Android/blob/master/qlassified/src/main/java/com/q42/qlassified/Storage/QlassifiedStorageService.java). After inserting the class into the [Qlassified.Service.setStorageService()](https://github.com/Q42/Qlassified-Android/blob/master/qlassified/src/main/java/com/q42/qlassified/Qlassified.java#L63) function, your class will be receiving encrypted data through the onSaveRequest() function and is required to return this encrypted data from the onGetRequest() function.
 
 ```java
 public class QlassifiedSharedPreferencesService extends QlassifiedStorageService {
@@ -89,6 +89,8 @@ public class QlassifiedSharedPreferencesService extends QlassifiedStorageService
 }
 ```
 
+The __[EncryptedEntry](https://github.com/Q42/Qlassified-Android/blob/master/qlassified/src/main/java/com/q42/qlassified/Entry/EncryptedEntry.java)__ class contains all the data required for this library to work. Just fill it with the data you have in your storage service, or extract data from it when receiving it in the onSaveRequest() method.
+
 ## Feature wish list
 
 This library will keep being improved while it's being used. Below are some features I thought of which I believe can improve this Library.
@@ -96,6 +98,7 @@ This library will keep being improved while it's being used. Below are some feat
 * Supporting <= API 17 (right now only from API 18, data is secured)
 * Debug mode
 * Encrypted Keys (right now only the value is encrypted)
+* Add Serializable data type (it's already sort of in the library, but not quite responding as expected)
 * Fingerprint, security code and hardware backed encryption support
 * Configuration builder for specific user configurations
 

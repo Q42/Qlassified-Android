@@ -100,27 +100,27 @@ public enum Qlassified {
      * Put methods
      */
 
-    public boolean put(@NonNull String key, Boolean booleanValue) {
+    public boolean put(@NonNull String key, @NonNull Boolean booleanValue) {
         return classifiedFactory.put(new QlassifiedBoolean(key, booleanValue));
     }
 
-    public boolean put(@NonNull String key, Float floatValue) {
+    public boolean put(@NonNull String key, @NonNull Float floatValue) {
         return classifiedFactory.put(new QlassifiedFloat(key, floatValue));
     }
 
-    public boolean put(@NonNull String key, Integer integerValue) {
+    public boolean put(@NonNull String key, @NonNull Integer integerValue) {
         return classifiedFactory.put(new QlassifiedInteger(key, integerValue));
     }
 
-    public boolean put(@NonNull String key, Long longValue) {
+    public boolean put(@NonNull String key, @NonNull Long longValue) {
         return classifiedFactory.put(new QlassifiedLong(key, longValue));
     }
 
-    public boolean put(@NonNull String key, String stringValue) {
+    public boolean put(@NonNull String key, @NonNull String stringValue) {
         return classifiedFactory.put(new QlassifiedString(key, stringValue));
     }
 
-    public boolean put(@NonNull String key, Serializable serializableValue) {
+    public boolean put(@NonNull String key, @NonNull Serializable serializableValue) {
         return classifiedFactory.put(new QlassifiedSerializable(key, serializableValue));
     }
 }

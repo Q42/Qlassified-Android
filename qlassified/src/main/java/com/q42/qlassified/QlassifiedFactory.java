@@ -96,31 +96,49 @@ public class QlassifiedFactory {
      */
     public Boolean getBoolean(String key) {
         final QlassifiedBoolean entry = (QlassifiedBoolean) get(key);
+        if(entry == null) {
+            return null;
+        }
         return entry.getValue();
     }
 
     public Float getFloat(String key) {
         final QlassifiedFloat entry = (QlassifiedFloat) get(key);
+        if(entry == null) {
+            return null;
+        }
         return entry.getValue();
     }
 
     public Integer getInt(String key) {
         final QlassifiedInteger entry = (QlassifiedInteger) get(key);
+        if(entry == null) {
+            return null;
+        }
         return entry.getValue();
     }
 
     public Long getLong(String key) {
         final QlassifiedLong entry = (QlassifiedLong) get(key);
+        if(entry == null) {
+            return null;
+        }
         return entry.getValue();
     }
 
     public String getString(String key) {
         final QlassifiedString entry = (QlassifiedString) get(key);
+        if(entry == null) {
+            return null;
+        }
         return entry.getValue();
     }
 
     public Serializable getSerializable(String key) {
         final QlassifiedSerializable entry = (QlassifiedSerializable) get(key);
+        if(entry == null) {
+            return null;
+        }
         return entry.getValue();
     }
 

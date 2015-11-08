@@ -11,7 +11,7 @@ import com.q42.qlassified.Entry.EncryptedEntry;
  * This class gives a false sense of security as the keys used here are
  * easily accessible to a medium level scriptkiddy. Fortunately this class
  * will be used less and less over the coming years as everyone will
- * slowely move to an Android version >= 18.
+ * slowely move to an Android version greater than 17.
  */
 public class QlassifiedGuard implements QlassifiedSecurity {
 

@@ -3,7 +3,7 @@
 # Qlassified Android Library
 __An Android Wrapper Library for easy Keystore Encryption__
 
-[![Build Status][travis-image]][travis-url]
+[![Build Status][travis-image]][travis-url][![Build Status][bintray-image]][bintray-url]
 
 ## Storing sensitive data
 
@@ -106,3 +106,5 @@ This library will keep being improved while it's being used. Below are some feat
 [qlassified-image]: https://raw.githubusercontent.com/Q42/Qlassified-Android/master/qlassified.png
 [travis-url]: https://travis-ci.org/Q42/Qlassified-Android
 [travis-image]: http://img.shields.io/travis/Q42/Qlassified-Android.svg
+[bintray-url]: https://bintray.com/shapoc/maven/qlassified/view
+[bintray-image]: https://img.shields.io/bintray/v/shapoc/maven/qlassified.svg

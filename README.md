@@ -95,6 +95,7 @@ The __[EncryptedEntry](https://github.com/Q42/Qlassified-Android/blob/master/qla
 
 This library will keep being improved while it's being used. Below are some features I thought of which I believe can improve this Library.
 
+* Supporting multiple storage services per application
 * Supporting <= API 17 (right now only from API 18, data is secured)
 * Debug mode
 * Encrypted Keys (right now only the value is encrypted)

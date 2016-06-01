@@ -8,34 +8,17 @@ import android.security.KeyPairGeneratorSpec;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
 import android.util.Log;
-
-import com.q42.qlassified.Entry.EncryptedEntry;
-import com.q42.qlassified.Entry.QlassifiedBoolean;
-import com.q42.qlassified.Entry.QlassifiedEntry;
-import com.q42.qlassified.Entry.QlassifiedFloat;
-import com.q42.qlassified.Entry.QlassifiedInteger;
-import com.q42.qlassified.Entry.QlassifiedLong;
-import com.q42.qlassified.Entry.QlassifiedString;
-
-import java.io.IOException;
-import java.math.BigInteger;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.UnrecoverableEntryException;
-import java.security.cert.CertificateException;
-import java.security.interfaces.RSAPrivateKey;
-import java.security.interfaces.RSAPublicKey;
-import java.security.spec.ECGenParameterSpec;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
+import com.q42.qlassified.Entry.*;
 
 import javax.security.auth.x500.X500Principal;
+import java.io.IOException;
+import java.math.BigInteger;
+import java.security.*;
+import java.security.cert.CertificateException;
+import java.security.interfaces.RSAPublicKey;
+import java.security.spec.RSAKeyGenParameterSpec;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 @TargetApi(18)
 public class QlassifiedKeyStore implements QlassifiedSecurity {
@@ -83,16 +66,14 @@ public class QlassifiedKeyStore implements QlassifiedSecurity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
             keyPairGenerator = KeyPairGenerator.getInstance(
-                    KeyProperties.KEY_ALGORITHM_EC, ANDROID_KEYSTORE_INSTANCE);
+                    KeyProperties.KEY_ALGORITHM_RSA, ANDROID_KEYSTORE_INSTANCE);
 
             keyPairGenerator.initialize(
                     new KeyGenParameterSpec.Builder(
                             alias,
-                            KeyProperties.PURPOSE_SIGN)
-                            .setAlgorithmParameterSpec(new ECGenParameterSpec("secp256r1"))
-                            .setDigests(KeyProperties.DIGEST_SHA256,
-                                    KeyProperties.DIGEST_SHA384,
-                                    KeyProperties.DIGEST_SHA512)
+                            KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT)
+                            .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_PKCS1)
+                            .setAlgorithmParameterSpec(new RSAKeyGenParameterSpec(512, RSAKeyGenParameterSpec.F4))
                             .build());
         /**
          * On versions below Marshmellow but above Jelly Bean, use the next best thing
@@ -209,7 +190,7 @@ public class QlassifiedKeyStore implements QlassifiedSecurity {
         String alias = getUniqueDeviceId(this.context);
         try {
             KeyStore.PrivateKeyEntry privateKeyEntry = (KeyStore.PrivateKeyEntry)keyStoreInstance.getEntry(alias, null);
-            RSAPrivateKey privateKey = (RSAPrivateKey) privateKeyEntry.getPrivateKey();
+            PrivateKey privateKey =  privateKeyEntry.getPrivateKey();
             return crypto.decrypt(input, privateKey);
         } catch (NoSuchAlgorithmException |
                 UnrecoverableEntryException |

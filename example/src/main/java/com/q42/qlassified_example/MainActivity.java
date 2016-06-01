@@ -1,15 +1,18 @@
 package com.q42.qlassified_example;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
-
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-
 import com.q42.qlassified.Qlassified;
 import com.q42.qlassified.Storage.QlassifiedSharedPreferencesService;
 
@@ -19,6 +22,9 @@ public class MainActivity extends Activity implements View.OnClickListener{
     private EditText putValueText;
 
     private EditText getValueText;
+
+    // used to handle onRequestPermissionsResult callback
+    private final int hasReadPermission = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +42,8 @@ public class MainActivity extends Activity implements View.OnClickListener{
 
         putButton.setOnClickListener(this);
         getButton.setOnClickListener(this);
+
+        this.getPermission(); // check if we have needed permissions
 
         // We can add our own storage service like so;
         Qlassified.Service.start(this);
@@ -78,6 +86,30 @@ public class MainActivity extends Activity implements View.OnClickListener{
         if (view != null) {
             InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+    }
+
+    /**
+     * Get permission to use READ_PHONE_STATE required to get a unique device
+     * identifier. Required on API 23.
+     *
+     * To ensure the example runs, always allow permissions as Qlassified will
+     * not work without the permission and this example does not handle denials.
+     */
+    void getPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            int hasReadPermission = ContextCompat.checkSelfPermission(
+                    this.getApplicationContext(),
+                    Manifest.permission.READ_PHONE_STATE);
+
+            if (hasReadPermission == PackageManager.PERMISSION_GRANTED) {
+                return;
+            } else {
+                ActivityCompat.requestPermissions(this,// do nothing in callback
+                                                  new String[]{Manifest
+                                                          .permission
+                                                          .READ_PHONE_STATE}, this.hasReadPermission);
+            }
         }
     }
 }

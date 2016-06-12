@@ -3,19 +3,19 @@ package com.q42.qlassified.Provider;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
+import android.provider.Settings;
 import android.security.KeyPairGeneratorSpec;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
-import android.telephony.TelephonyManager;
 import android.util.Log;
 
+import com.q42.qlassified.Entry.EncryptedEntry;
 import com.q42.qlassified.Entry.QlassifiedBoolean;
 import com.q42.qlassified.Entry.QlassifiedEntry;
 import com.q42.qlassified.Entry.QlassifiedFloat;
 import com.q42.qlassified.Entry.QlassifiedInteger;
 import com.q42.qlassified.Entry.QlassifiedLong;
 import com.q42.qlassified.Entry.QlassifiedString;
-import com.q42.qlassified.Entry.EncryptedEntry;
 
 import java.io.IOException;
 import java.math.BigInteger;
@@ -34,7 +34,6 @@ import java.security.interfaces.RSAPublicKey;
 import java.security.spec.ECGenParameterSpec;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
-import java.util.UUID;
 
 import javax.security.auth.x500.X500Principal;
 
@@ -131,23 +130,8 @@ public class QlassifiedKeyStore implements QlassifiedSecurity {
         Log.d("KeyStore", String.format("Private key: %s", keyPair.getPrivate()));
     }
 
-    /**
-     * Amazing method from the interwebs, found here: http://stackoverflow.com/a/2853253
-     * This method ensures a unique identifier for each Android device
-     * @param context {Context} The application context
-     * @return A string unique to the specific device
-     */
     private String getUniqueDeviceId(Context context) {
-
-        final TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-
-        final String tmDevice, tmSerial, androidId;
-        tmDevice = "" + tm.getDeviceId();
-        tmSerial = "" + tm.getSimSerialNumber();
-        androidId = "" + android.provider.Settings.Secure.getString(context.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
-
-        UUID deviceUuid = new UUID(androidId.hashCode(), ((long)tmDevice.hashCode() << 32) | tmSerial.hashCode());
-        return deviceUuid.toString();
+        return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
     }
 
     public EncryptedEntry encryptEntry(QlassifiedEntry classifiedEntry) {

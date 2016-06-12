@@ -134,12 +134,14 @@ public class QlassifiedKeyStore implements QlassifiedSecurity {
         final String decryptedType = decryptedString.substring(splitPosition + 1);
         final String decryptedValue = decryptedString.substring(0, splitPosition);
 
+        final String key = entry.getKey();
+
         switch (QlassifiedEntry.Type.valueOf(decryptedType)) {
-            case BOOLEAN: return new QlassifiedBoolean(decrypt(entry.getKey()), Boolean.valueOf(decryptedValue));
-            case FLOAT: return new QlassifiedFloat(decrypt(entry.getKey()), Float.valueOf(decryptedValue));
-            case INTEGER: return new QlassifiedInteger(decrypt(entry.getKey()), Integer.valueOf(decryptedValue));
-            case LONG: return new QlassifiedLong(decrypt(entry.getKey()), Long.valueOf(decryptedValue));
-            default: return new QlassifiedString(decrypt(entry.getKey()), decryptedValue);
+            case BOOLEAN: return new QlassifiedBoolean(key, Boolean.valueOf(decryptedValue));
+            case FLOAT: return new QlassifiedFloat(key, Float.valueOf(decryptedValue));
+            case INTEGER: return new QlassifiedInteger(key, Integer.valueOf(decryptedValue));
+            case LONG: return new QlassifiedLong(key, Long.valueOf(decryptedValue));
+            default: return new QlassifiedString(key, decryptedValue);
         }
     }
 

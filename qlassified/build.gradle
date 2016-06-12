@@ -8,7 +8,7 @@ android {
         minSdkVersion 16
         targetSdkVersion 23
         versionCode 1
-        versionName "0.1.0"
+        versionName "0.1.1"
     }
     buildTypes {
         release {
@@ -40,7 +40,7 @@ ext {
     siteUrl = 'https://github.com/Q42/Qlassified-Android'
     gitUrl = 'https://github.com/Q42/Qlassified-Android.git'
 
-    libraryVersion = '0.1.0'
+    libraryVersion = '0.1.1'
 
     developerId = 'shapoc'
     developerName = 'Jimmy Aupperlee'

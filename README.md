@@ -14,7 +14,7 @@ We all need to store sensitive data now and again. On Android, keeping your data
 Add the gradle dependency to your application.
 
 ```java
-compile 'com.q42:qlassified:0.1.0'
+compile 'com.q42:qlassified:0.1.1'
 ```
 
 The library is available on both jCenter and Maven Central so you can use whichever. Whatever floats your boat!

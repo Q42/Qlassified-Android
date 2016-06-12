@@ -15,9 +15,10 @@ android:
     - '.+'
 
   components:
+    - tools
     - extra-android-support
     - extra-android-m2repository
-    - build-tools-23.0.1
+    - build-tools-23.0.2
     - android-23
 
 script: touch local.properties && ./gradlew test

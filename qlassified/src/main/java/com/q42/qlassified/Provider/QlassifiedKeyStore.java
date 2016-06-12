@@ -3,40 +3,22 @@ package com.q42.qlassified.Provider;
 import android.annotation.TargetApi;
 import android.content.Context;
 import android.os.Build;
+import android.provider.Settings;
 import android.security.KeyPairGeneratorSpec;
 import android.security.keystore.KeyGenParameterSpec;
 import android.security.keystore.KeyProperties;
-import android.telephony.TelephonyManager;
 import android.util.Log;
-
-import com.q42.qlassified.Entry.QlassifiedBoolean;
-import com.q42.qlassified.Entry.QlassifiedEntry;
-import com.q42.qlassified.Entry.QlassifiedFloat;
-import com.q42.qlassified.Entry.QlassifiedInteger;
-import com.q42.qlassified.Entry.QlassifiedLong;
-import com.q42.qlassified.Entry.QlassifiedString;
-import com.q42.qlassified.Entry.EncryptedEntry;
-
-import java.io.IOException;
-import java.math.BigInteger;
-import java.security.InvalidAlgorithmParameterException;
-import java.security.InvalidKeyException;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.KeyStore;
-import java.security.KeyStoreException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.UnrecoverableEntryException;
-import java.security.cert.CertificateException;
-import java.security.interfaces.RSAPrivateKey;
-import java.security.interfaces.RSAPublicKey;
-import java.security.spec.ECGenParameterSpec;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.UUID;
+import com.q42.qlassified.Entry.*;
 
 import javax.security.auth.x500.X500Principal;
+import java.io.IOException;
+import java.math.BigInteger;
+import java.security.*;
+import java.security.cert.CertificateException;
+import java.security.interfaces.RSAPublicKey;
+import java.security.spec.RSAKeyGenParameterSpec;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 
 @TargetApi(18)
 public class QlassifiedKeyStore implements QlassifiedSecurity {
@@ -84,16 +66,14 @@ public class QlassifiedKeyStore implements QlassifiedSecurity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
             keyPairGenerator = KeyPairGenerator.getInstance(
-                    KeyProperties.KEY_ALGORITHM_EC, ANDROID_KEYSTORE_INSTANCE);
+                    KeyProperties.KEY_ALGORITHM_RSA, ANDROID_KEYSTORE_INSTANCE);
 
             keyPairGenerator.initialize(
                     new KeyGenParameterSpec.Builder(
                             alias,
-                            KeyProperties.PURPOSE_SIGN)
-                            .setAlgorithmParameterSpec(new ECGenParameterSpec("secp256r1"))
-                            .setDigests(KeyProperties.DIGEST_SHA256,
-                                    KeyProperties.DIGEST_SHA384,
-                                    KeyProperties.DIGEST_SHA512)
+                            KeyProperties.PURPOSE_ENCRYPT | KeyProperties.PURPOSE_DECRYPT)
+                            .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_RSA_PKCS1)
+                            .setAlgorithmParameterSpec(new RSAKeyGenParameterSpec(512, RSAKeyGenParameterSpec.F4))
                             .build());
         /**
          * On versions below Marshmellow but above Jelly Bean, use the next best thing
@@ -131,23 +111,8 @@ public class QlassifiedKeyStore implements QlassifiedSecurity {
         Log.d("KeyStore", String.format("Private key: %s", keyPair.getPrivate()));
     }
 
-    /**
-     * Amazing method from the interwebs, found here: http://stackoverflow.com/a/2853253
-     * This method ensures a unique identifier for each Android device
-     * @param context {Context} The application context
-     * @return A string unique to the specific device
-     */
     private String getUniqueDeviceId(Context context) {
-
-        final TelephonyManager tm = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
-
-        final String tmDevice, tmSerial, androidId;
-        tmDevice = "" + tm.getDeviceId();
-        tmSerial = "" + tm.getSimSerialNumber();
-        androidId = "" + android.provider.Settings.Secure.getString(context.getContentResolver(), android.provider.Settings.Secure.ANDROID_ID);
-
-        UUID deviceUuid = new UUID(androidId.hashCode(), ((long)tmDevice.hashCode() << 32) | tmSerial.hashCode());
-        return deviceUuid.toString();
+        return Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ANDROID_ID);
     }
 
     public EncryptedEntry encryptEntry(QlassifiedEntry classifiedEntry) {
@@ -169,12 +134,14 @@ public class QlassifiedKeyStore implements QlassifiedSecurity {
         final String decryptedType = decryptedString.substring(splitPosition + 1);
         final String decryptedValue = decryptedString.substring(0, splitPosition);
 
+        final String key = entry.getKey();
+
         switch (QlassifiedEntry.Type.valueOf(decryptedType)) {
-            case BOOLEAN: return new QlassifiedBoolean(decrypt(entry.getKey()), Boolean.valueOf(decryptedValue));
-            case FLOAT: return new QlassifiedFloat(decrypt(entry.getKey()), Float.valueOf(decryptedValue));
-            case INTEGER: return new QlassifiedInteger(decrypt(entry.getKey()), Integer.valueOf(decryptedValue));
-            case LONG: return new QlassifiedLong(decrypt(entry.getKey()), Long.valueOf(decryptedValue));
-            default: return new QlassifiedString(decrypt(entry.getKey()), decryptedValue);
+            case BOOLEAN: return new QlassifiedBoolean(key, Boolean.valueOf(decryptedValue));
+            case FLOAT: return new QlassifiedFloat(key, Float.valueOf(decryptedValue));
+            case INTEGER: return new QlassifiedInteger(key, Integer.valueOf(decryptedValue));
+            case LONG: return new QlassifiedLong(key, Long.valueOf(decryptedValue));
+            default: return new QlassifiedString(key, decryptedValue);
         }
     }
 
@@ -225,7 +192,7 @@ public class QlassifiedKeyStore implements QlassifiedSecurity {
         String alias = getUniqueDeviceId(this.context);
         try {
             KeyStore.PrivateKeyEntry privateKeyEntry = (KeyStore.PrivateKeyEntry)keyStoreInstance.getEntry(alias, null);
-            RSAPrivateKey privateKey = (RSAPrivateKey) privateKeyEntry.getPrivateKey();
+            PrivateKey privateKey =  privateKeyEntry.getPrivateKey();
             return crypto.decrypt(input, privateKey);
         } catch (NoSuchAlgorithmException |
                 UnrecoverableEntryException |

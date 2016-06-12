@@ -15,6 +15,7 @@ android:
     - '.+'
 
   components:
+    - tools
     - extra-android-support
     - extra-android-m2repository
     - build-tools-23.0.2

@@ -109,3 +109,11 @@ This library will keep being improved while it's being used. Below are some feat
 [travis-image]: http://img.shields.io/travis/Q42/Qlassified-Android.svg
 [bintray-url]: https://bintray.com/shapoc/maven/qlassified/view
 [bintray-image]: https://img.shields.io/bintray/v/shapoc/maven/qlassified.svg
+
+## ProGuard
+
+If you are using ProGuard, you may need to include the following rule:
+
+```
+-keep class org.spongycastle.** { *; }
+```
